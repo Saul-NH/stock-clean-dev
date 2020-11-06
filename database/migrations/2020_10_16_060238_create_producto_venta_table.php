@@ -18,8 +18,8 @@ class CreateProductoVentaTable extends Migration
             $table->foreignId('venta_id')->constrained('ventas');
             $table->foreignId('producto_id')->constrained('productos');
 
-            $table->decimal('cantidad_medida',8,2);
-            $table->decimal('precio_venta',8,2);
+            $table->decimal('cantidad_medida',10,2);
+            $table->decimal('precio_venta',10,2);
 
         });
     }

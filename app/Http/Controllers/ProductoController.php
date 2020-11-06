@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Producto;
 use Illuminate\Http\Request;
 
-class ProductosController extends Controller
+class ProductoController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -126,5 +126,18 @@ class ProductosController extends Controller
         $producto->delete();
 
         return back()->with('mensaje',$mensaje);
+    }
+
+
+    /* Ruta para test de session() y javascript: 
+    ** Nota: Funciono con javascript
+    */
+
+    public function test(Request $request){
+
+        $productosVentaTotal = getProductosVentaTotal($request->productos_venta);
+
+
+        return response( $productosVentaTotal->total_venta );
     }
 }

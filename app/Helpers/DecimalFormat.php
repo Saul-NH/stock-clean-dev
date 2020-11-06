@@ -17,3 +17,14 @@
 	 		return number_format($number).'  '. $tipo_medida.'s';
 	 	}
  	}
+
+ 	function getFormatSell($tipo_medida){
+ 		switch ($tipo_medida) {
+ 			case 'litro': return 'litros';
+ 			case 'kg': return 'kg';
+ 			case 'pieza': return 'piezas';
+ 			default:
+ 				return 'unidad';
+ 				break;
+ 		}
+ 	}

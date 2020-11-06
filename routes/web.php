@@ -14,12 +14,17 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('home');
+    return view('welcome');
 });
+
+Route::post('/test','ProductoController@test')->name('test');
 
 Auth::routes();
 
-Route::resource('productos','ProductosController');
+Route::resource('productos','ProductoController');
+Route::resource('ventas', 'VentaController')->except([
+     'edit', 'update', 'destroy', 'create'
+]);
 
 Route::get('/home', 'HomeController@index')->name('home');
 

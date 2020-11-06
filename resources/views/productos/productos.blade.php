@@ -50,6 +50,7 @@
                     <tbody>
                      @foreach($productos as $producto)
                         <tr id="fila_{{$producto->id}}">
+                            
                             <td class="fit h5 ">{{$producto->name}}</td>
                             <td class="fit h5 ">{{ getFormatAmount($producto->cantidad_stock,$producto->tipo_medida) }} </td>
                             <td class="fit h5 ">{{ getFormatPrice($producto->precio_compra,$producto->tipo_medida) }} </td>
@@ -89,7 +90,7 @@
                     </tbody>
             </table>
         </div>
-
+        
     </div>
 
     <!-- Modal -->

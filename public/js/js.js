@@ -85,8 +85,8 @@
         /*
         *   Modal de confirmacion para la terminación de la venta
         */    
-            $('#finalizar_venta_modal').on('shown.bs.modal', function(e) {
-                $('#terminar_venta_button').click(function () {
+            $('#terminar_venta_button').click(function (event) {
+                    event.preventDefault();
                     $("#finalizar_venta_modal").modal("hide");
                     finalizaVenta();
                     /*Aqui ira la llamada al metodo getProductosString()*/
@@ -101,6 +101,8 @@
                      
                         // especifica si será una petición POST o GET
                         type : 'post',
+
+                        cache: false,
                      
                         // el tipo de información que se espera de respuesta
                         //dataType : 'json',
@@ -136,7 +138,6 @@
                     });
 
                 });
-            });
 
 
         /*

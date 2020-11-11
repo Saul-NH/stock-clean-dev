@@ -124,7 +124,7 @@ class ProductoController extends Controller
         $producto = Producto::find($id);
         $mensaje = '"'.$producto->name.'"'.' borrado correctamente';
         $producto->delete();
-
+        
         return back()->with('mensaje',$mensaje);
     }
 

@@ -2,6 +2,14 @@
         let producto_id;
         let total_venta =0;
         let productos_venta = [];
+        let productos_venta_string = [];
+
+        $('#mensaje').hide();
+        $('#button_dissmiss').on('click', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+            $('#mensaje').hide();
+        });
 
         /*
         *   Control para buscar en la tabla
@@ -71,6 +79,63 @@
                     $('#finalizar_venta_modal').modal('show');
                     $('#modal_body_finalizar').html(tableContent);
                 }
+            });
+
+
+        /*
+        *   Modal de confirmacion para la terminación de la venta
+        */    
+            $('#finalizar_venta_modal').on('shown.bs.modal', function(e) {
+                $('#terminar_venta_button').click(function () {
+                    $("#finalizar_venta_modal").modal("hide");
+                    finalizaVenta();
+                    /*Aqui ira la llamada al metodo getProductosString()*/
+                    getProductosString();
+                    $.ajax({
+                        // la URL para la petición
+                        url : 'ventas',
+                     
+                        // la información a enviar
+                        // (también es posible utilizar una cadena de datos)
+                        data : {productos_venta : productos_venta_string , total_venta : total_venta} ,
+                     
+                        // especifica si será una petición POST o GET
+                        type : 'post',
+                     
+                        // el tipo de información que se espera de respuesta
+                        //dataType : 'json',
+                     
+                        // código a ejecutar si la petición es satisfactoria;
+                        // la respuesta es pasada como argumento a la función
+                        success : function(res) {
+                            console.log(res);
+                           // location.reload();
+                            //$('#mensaje').attr('hidden', true);
+                            //$('#mensaje').attr('hidden', false);
+                            $('#mensaje').show();
+                            $('#mensaje_content').html(res);
+                            cancelarVenta();
+
+
+                        },
+                     
+                        // código a ejecutar si la petición falla;
+                        // son pasados como argumentos a la función
+                        // el objeto jqXHR (extensión de XMLHttpRequest), un texto con el estatus
+                        // de la petición y un texto con la descripción del error que haya dado el servidor
+                        error : function(jqXHR, status, error) {
+                            console.log('Disculpe, existió un problema');
+                            console.log(error);
+                        },
+                     
+                        // código a ejecutar sin importar si la petición falló o no
+                        complete : function(jqXHR, status) {
+                            console.log('Petición realizada');
+
+                        }
+                    });
+
+                });
             });
 
 
@@ -201,7 +266,7 @@
 
 
         /*
-        *   peticion ajax para guardar productos de la compra
+        *   peticion ajax para guardar productos de la compra BORRADOR
         */
             $('.ajax').on('click', function (e) {
                 e.preventDefault();
@@ -275,7 +340,24 @@
                 $('.mensaje-cantidad').attr('hidden', true);
                 total_venta = 0;
                 productos_venta = [];
+                productos_venta_string = [];
             }
+
+            // Función para finalizar la venta, restablece todo para iniciar una nueva venta
+            function finalizaVenta() {
+                $("#nueva_venta").show();
+                $("#terminar_venta").attr("hidden",true);
+                $("#cancelar_venta").attr("hidden",true);
+                $(".agregar-producto").attr("hidden",true);
+                $(".borrar-producto").attr("hidden",true);
+                $('#cantidad_productos').removeClass("btn-success");
+                $('#cantidad_productos').addClass('btn-secondary');
+                $('#cantidad_productos_badge').removeClass('badge-danger');
+                $('#ventas').text('-');
+                $('.limpiar-input-cantidad').val('');
+                $('.mensaje-cantidad').attr('hidden', true);
+            }
+
 
             // Funcion para obtener el subtotal del nuevo producto agregado a la venta
             function getSubTotal (producto){
@@ -291,6 +373,13 @@
                     }
                 });
                 return Indice;
+            }
+
+            function getProductosString(){
+
+                jQuery.each(productos_venta, function(index, val) {
+                    productos_venta_string.push(JSON.stringify(val));
+                });
             }
     });
 

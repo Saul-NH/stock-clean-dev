@@ -20,6 +20,7 @@ class CreateProductoVentaTable extends Migration
 
             $table->decimal('cantidad_medida',10,2);
             $table->decimal('precio_venta',10,2);
+            $table->primary(['venta_id', 'producto_id']);
 
         });
     }

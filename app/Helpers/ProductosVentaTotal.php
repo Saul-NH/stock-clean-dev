@@ -24,16 +24,16 @@
 		**	foreach para obtener el total de la venta.
 		*/        
 
-            foreach ($productos_compra as $producto) {
+            /*foreach ($productos_compra as $producto) {
                 $total_venta += $producto->precio_venta;
-            }
+            }*/
 
         /* Creamos el array con los productos y el total de la venta*/  
           
-    		$productosCompraArray = ['productos_compra'=> $productos_compra, 'total_venta' => $total_venta];
+    		/*$productosCompraArray = ['productos_compra'=> $productos_compra];*/
 
     	
 
 
-    	return $productosCompraArray;
+    	return $productos_compra;
 	}

@@ -47,7 +47,24 @@ class VentaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $productos_venta = $request->productos_venta;
+        $total_venta = $request->total_venta;
+        $productos_venta = getProductosVentaTotal($productos_venta);
+        $venta = new Venta;
+        //$user = auth()->user()->id;
+        $venta->total_venta = $total_venta;
+        $venta->user_id = auth()->user()->id;
+        $venta->save();
+
+       // $venta->products()->save($venta->id);
+        
+        
+        foreach ($productos_venta as $producto) {
+            
+            $venta->products()->attach($producto->id, ['cantidad_medida'=>$producto->cantidad_vendida, 'precio_venta'=>$producto->precio_venta]);
+        }
+
+        return response ('¡Venta registrada con EXITO!'. "<br>".' Total = '.$total_venta);
     }
 
     /**
@@ -58,7 +75,10 @@ class VentaController extends Controller
      */
     public function show($id)
     {
-        //
+        $venta1 = Venta::find($id);
+
+       // $venta1->products()->attach(5);
+        return response($venta1->products[0]->pivot->precio_venta);
     }
 
     /**

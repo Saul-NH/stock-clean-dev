@@ -12,7 +12,7 @@ class Venta extends Model
     }
 
     public function products(){
-        return $this->belongsToMany('App\Producto');
+        return $this->belongsToMany('App\Producto')->withPivot('cantidad_medida', 'precio_venta');
     }
 
     protected $fillable = [

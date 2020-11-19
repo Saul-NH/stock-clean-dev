@@ -13,15 +13,6 @@
     @endif
 
     <div class="container" id="mensaje">
-                {{-- <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <div id="mensaje_content">
-                        
-                    </div>
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div> --}}
-
                 <div class="alert alert-success alert-dismissible" role="alert">
                     <div id="mensaje_content">
                         
@@ -104,11 +95,15 @@
                             <td class="fit h5">
                                 <div class="row justify-content-center">
                                     <div class="col-md-7">
-                                        <input type="number" id="cantidad_{{$producto->id}}" class="form-control form-control-lg limpiar-input-cantidad" placeholder="{{getFormatSell($producto->tipo_medida)}}">
+                                        <input type="number" min="1" step="any" id="cantidad_{{$producto->id}}" class="form-control form-control-lg limpiar-input-cantidad" placeholder="{{getFormatSell($producto->tipo_medida)}}">
                                         <div class="mensaje-cantidad" id="mensaje_{{$producto->id}}" hidden>
                                             <p class="text-danger text-center">Ingresa la cantidad</p>
                                         </div>
-                                        
+
+                                        <div id="stock_{{$producto->id}}" hidden>
+                                            <p class="text-danger text-center">La cantidad a vender<br>es mayor a la que hay en stock </p>
+                                        </div>
+
                                     </div>
                                 </div>
 

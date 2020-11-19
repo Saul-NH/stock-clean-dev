@@ -116,6 +116,7 @@
                             //$('#mensaje').attr('hidden', false);
                             $('#mensaje').show();
                             $('#mensaje_content').html(res);
+                            updateStock();
                             cancelarVenta();
 
 
@@ -145,26 +146,35 @@
         */    
             $(".agregar-producto").on('click', function (e) {
                 e.preventDefault();
-                if ($('#cantidad_'+$(this).attr('data-id')).val() == "") {
+                if ($('#cantidad_'+$(this).attr('data-id')).val() == "" || $('#cantidad_'+$(this).attr('data-id')).val() <= 0) {
                     //alert('esta vacio');
                     $('#mensaje_'+$(this).attr('data-id')).attr('hidden', false);
-                }else{
+                }else{                    
 
-                    $('#mensaje_'+$(this).attr('data-id')).attr('hidden', true);
-                    $(this).hide();
-                    $('#'+$(this).attr('data-id')).attr("hidden",false);
-                    $('#'+$(this).attr('data-id')).show();
+                    if (checkStock($(this).attr('data-producto'),$('#cantidad_'+$(this).attr('data-id')).val())) {
+                        
+                        $('#stock_'+$(this).attr('data-id')).attr('hidden', false);
+                        $('#mensaje_'+$(this).attr('data-id')).attr('hidden', true);
 
-                    let producto = $(this).attr('data-producto');
-                    producto = JSON.parse(producto);
-                    producto.cantidad_vendida = $('#cantidad_'+$(this).attr('data-id')).val();
-                    producto.sub_total = getSubTotal (producto);
-                    total_venta += producto.sub_total;
-                    productos_venta.push(producto);
+                    }else{
 
-                    $('#ventas').text(productos_venta.length);
-                    console.log(producto);
-                    console.log(productos_venta); 
+                        $('#stock_'+$(this).attr('data-id')).attr('hidden', true);
+                        $('#mensaje_'+$(this).attr('data-id')).attr('hidden', true);
+                        $(this).hide();
+                        $('#'+$(this).attr('data-id')).attr("hidden",false);
+                        $('#'+$(this).attr('data-id')).show();
+
+                        let producto = $(this).attr('data-producto');
+                        producto = JSON.parse(producto);
+                        producto.cantidad_vendida = $('#cantidad_'+$(this).attr('data-id')).val();
+                        producto.sub_total = getSubTotal (producto);
+                        total_venta += producto.sub_total;
+                        productos_venta.push(producto);
+
+                        $('#ventas').text(productos_venta.length);
+                        console.log(producto);
+                        console.log(productos_venta);
+                    }                     
                 }
                 
             });
@@ -382,6 +392,31 @@
                     productos_venta_string.push(JSON.stringify(val));
                 });
             }
+
+            //Función para actualizar la cantidad en stock
+            function updateStock(){
+
+                for (var i = 0; i < productos_venta.length; i++) {
+                    
+                    console.log('Antes'+$('#agregar'+productos_venta[i].id).attr('data-producto'));
+                    let productoBoton = $('#agregar'+productos_venta[i].id).attr('data-producto');
+                    productoBoton = JSON.parse(productoBoton);
+                    productoBoton.cantidad_stock -= productos_venta[i].cantidad_vendida;
+
+                    $('#agregar'+productos_venta[i].id).attr('data-producto', JSON.stringify(productoBoton));
+                    console.log('Despues'+$('#agregar'+productos_venta[i].id).attr('data-producto'));
+                }
+            }
+
+            function checkStock(producto, cantidad){
+                productoStock = JSON.parse(producto);
+                if (productoStock.cantidad_stock < cantidad) {
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+
     });
 
 
